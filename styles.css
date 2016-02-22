@@ -51,4 +51,78 @@ body {
 
 h2 {
   color: #fff;
+  font-family: 'Open Sans Condensed', sans-serif;
+  margin: 0;
+  font-size:44px;
+}
+
+p {
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-size:20px;
+  font-weight: bold;
+}
+
+h5 {
+  color: #fff;
+  font-family: 'Open Sans Condensed', sans-serif;
+  font-size:20px;
+  margin: 0;
+  margin-left: 5px;
+  display: inline-block;
+}
+
+.head {
+  position: fixed;
+}
+
+i {
+  color: #fff;
+  cursor: pointer;
+}
+
+.bars {
+  width: calc(100% - 880px);
+  border-bottom: 1px solid pink;
+  float: right;
+}
+
+.earth {
+  width: 880px;
+  border-bottom: 1px solid pink;
+  float: left;
+
+}
+
+.moreinfo {
+  position: fixed;
+  top: 0;
+  left:0;
+  right:0;
+  bottom:0;
+  margin: auto;
+  width: 400px;
+  height: 300px;
+  background-color: #8d8d8d;
+  opacity: .8;
+  border-radius: 5px;
+  border: 1px solid #fff;
+  padding: 10px;
+  text-align: center;
+}
+
+.infoexit {
+  position: absolute;
+  color: red;
+  top: 0;
+  right: 0;
+  margin: 30px;
+  cursor: pointer;
+  border-bottom: 2px solid red;
+  padding: 0 5px;
+}
+
+
+.infoexit:hover {
+  color: #fff;
+  border-bottom: 2px solid #fff;
 }

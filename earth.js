@@ -1,10 +1,16 @@
+angular.module("world").controller("earth", function($scope) {
+
+  $scope.open = true;
+
+});
+
 //rotate earth
 d3.select(window)
     .on("mousemove", mousemove)
     .on("mouseup", mouseup);
 
-var width = 960,
-    height = 900;
+var width = 880,
+    height = 880;
 
 //view of earth
 var proj = d3.geo.orthographic()
@@ -56,10 +62,10 @@ function ready(error, world, places) {
         .attr("cy", "25%");//light position y direction
       ocean_fill.append("stop")
       .attr("offset", "5%")
-      .attr("stop-color", "#fff");//light color
+      .attr("stop-color", "lightblue");//light color
       ocean_fill.append("stop")
       .attr("offset", "100%")
-      .attr("stop-color", "lightblue");//background color
+      .attr("stop-color", "#1b85b8");//background color
 
   //globe fill
   var globe_highlight = svg.append("defs").append("radialGradient")
@@ -103,14 +109,16 @@ function ready(error, world, places) {
         .attr("stop-opacity","0");
 
 //actually append svgs
+//of shadow
   svg.append("ellipse")
     .attr("cx", 450)
     .attr("cy", 450)
-    .attr("rx", proj.scale()*.90)
-    .attr("ry", proj.scale()*.25)
+    .attr("rx", proj.scale()*0.90)
+    .attr("ry", proj.scale()*0.25)
     .attr("class", "noclicks")
     .style("fill", "url(#drop_shadow)");
 
+//of ocean
   svg.append("circle")
     .attr("cx", width / 2)
     .attr("cy", height / 2)

@@ -1,21 +1,41 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
-<html>
+<html ng-app="world">
   <head>
     <title>My Globe</title>
 
     <link rel="stylesheet" href="styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
-    <!-- <script src="//d3js.org/d3.v3.min.js"></script> -->
     <script src="d3.v3.min.js"></script>
     <script src="queue.v1.min.js"></script>
     <script src="topojson.v1.min.js"></script>
+
   </head>
-  <body>
+  <body ng-controller="mainCtrl">
     <div class="head">
-      <h2>DevMountain World</h2>
+      <h2>DevMountain: Time Lapse</h2>
+      <i class="fa fa-toggle-down" ng-hide="open" ng-click="open=true"><h5>More Info</h5></i>
+      <i class="fa fa-toggle-up" ng-show="open" ng-click="open=false"><h5>Close</h5></i>
+      <div class="moreinfo" ng-show="open">
+        <h2>Time Lapse</h2>
+        <p>This animation is a visual representation of where DevMountain students came from and where they went after their cohort finished in relation to time.</p>
+        <p>The bars on the right are a live display of some specific statistics related to how many students have came through, where they came from, local retention rate, and if they got a programming job when they completed the course.</p>
+        <p class="infoexit" ng-click="open=false">x</p>
+      </div>
+    </div>
+    <div class="earth" ng-controller="earth">
+
+    </div>
+    <div class="bars" ng-controller="bars">
+
     </div>
 
-    <script src="script.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
+    <script src="app.js"></script>
+    <script src="mainCtrl.js"></script>
+    <script src="earth.js"></script>
+    <script src="bars.js"></script>
+
   </body>
 </html>
