@@ -20,7 +20,7 @@
       <div class="moreinfo" ng-show="open">
         <h2>Time Lapse</h2>
         <p>This animation is a visual representation of where DevMountain students came from and where they went after their cohort finished in relation to time.</p>
-        <p>The bars on the right are a live display of some specific statistics related to how many students have came through, where they came from, local retention rate, and if they got a programming job when they completed the course.</p>
+        <p>The bars on the right are a display of some specific statistics related to total student count,  where they came from, out of state retention rate, and job placement after completion of the course.</p>
         <p class="infoexit" ng-click="open=false">x</p>
       </div>
     </div>
@@ -28,6 +28,12 @@
 
     </div>
     <div class="bars" ng-controller="bars">
+      <div class="students"><h2>Total Students</h2></div>
+      <div class="states"><h2>States</h2></div>
+      <div class="countries"><h2>Countries</h2></div>
+      <div class="blank"></div>
+      <div class="retention"><h2>Retention</h2></div>
+      <div class="jobs"><h2>Total Jobs</h2></div>
 
     </div>
 

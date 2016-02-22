@@ -71,6 +71,10 @@ h5 {
   display: inline-block;
 }
 
+svg {
+  float: left;
+}
+
 .head {
   position: fixed;
 }
@@ -82,15 +86,24 @@ i {
 
 .bars {
   width: calc(100% - 880px);
-  border-bottom: 1px solid pink;
+  height: 860px;
+  display: inline-block;
+  float: right;
+}
+.bars div {
+  clear: both;
+  height: 100px;
+  float: right;
+  margin: 20px 0;
+}
+
+.bars div h2 {
   float: right;
 }
 
 .earth {
   width: 880px;
-  border-bottom: 1px solid pink;
   float: left;
-
 }
 
 .moreinfo {
@@ -125,4 +138,14 @@ i {
 .infoexit:hover {
   color: #fff;
   border-bottom: 2px solid #fff;
+}
+
+
+@media only screen and (max-width: 1200px) {
+  .bars {
+    width: 100%;
+  }
+  svg {
+    float: left;
+  }
 }

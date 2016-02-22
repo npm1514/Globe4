@@ -42,7 +42,7 @@ var links = [],
     arcLines = [];
 
 
-var svg = d3.select("body").append("svg")
+var svg = d3.select(".earth").append("svg")
             .attr("width", width)
             .attr("height", height)
             .on("mousedown", mousedown);
@@ -265,4 +265,9 @@ function mouseup() {
     mousemove();
     m0 = null;
   }
+}
+
+function modes() {
+    return this.width() <= 900 ||
+      d3.orthographic().scale(300);
 }
