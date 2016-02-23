@@ -49,8 +49,8 @@ var svg = d3.select(".earth").append("svg")
 
 //call in json of world svg and coordinates
 queue()
-    .defer(d3.json, "world-110m.json")
-    .defer(d3.json, "places.json")
+    .defer(d3.json, "json/world-110m.json")
+    .defer(d3.json, "json/places.json")
     .await(ready);
 
 
@@ -126,11 +126,13 @@ function ready(error, world, places) {
     .attr("class", "noclicks")
     .style("fill", "url(#ocean_fill)");
 
+//of land
   svg.append("path")
     .datum(topojson.feature(world, world.objects.land))
     .attr("class", "land noclicks")
     .attr("d", path);
 
+//of globe highlight
   svg.append("circle")
     .attr("cx", width / 2)
     .attr("cy", height / 2)
@@ -138,6 +140,7 @@ function ready(error, world, places) {
     .attr("class","noclicks")
     .style("fill", "url(#globe_highlight)");
 
+//of globe shading
   svg.append("circle")
     .attr("cx", width / 2)
     .attr("cy", height / 2)
@@ -145,6 +148,7 @@ function ready(error, world, places) {
     .attr("class","noclicks")
     .style("fill", "url(#globe_shading)");
 
+//of globe points
   svg.append("g").attr("class","points")
       .selectAll("text")
       .data(places.features)
@@ -165,24 +169,36 @@ function ready(error, world, places) {
     });
   });
 
-  // build geoJSON features from links array
+  // build arclines features from links array
   links.forEach(function(e,i,a) {
-    var feature =   { "type": "Feature", "geometry": { "type": "LineString", "coordinates": [e.source,e.target] }}
-    arcLines.push(feature)
-  })
+    var feature = {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [e.source,e.target]
+      }
+    };
 
-  svg.append("g").attr("class","arcs")
-    .selectAll("path").data(arcLines)
+    console.log(feature);
+    arcLines.push(feature);
+    console.log(arcLines);
+  });
+
+  svg.append("g")
+    .attr("class","arcs")
+    .selectAll("path")
+    .data(arcLines)
     .enter().append("path")
-      .attr("class","arc")
-      .attr("d",path)
+    .attr("class","arc")
+    .attr("d",path);
 
   svg.append("g").attr("class","flyers")
     .selectAll("path").data(links)
     .enter().append("path")
     .attr("class","flyer")
-    .attr("d", function(d) { return swoosh(flying_arc(d)) })
-
+    .attr("d", function(d) {
+      return swoosh(flying_arc(d));
+    });
   refresh();
 }
 
@@ -190,10 +206,11 @@ function flying_arc(pts) {
   var source = pts.source,
       target = pts.target;
 
-  var mid = location_along_arc(source, target, .5);
+  var mid = location_along_arc(source, target, 0.5);
   var result = [ proj(source),
                  sky(mid),
-                 proj(target) ]
+                 proj(target)
+               ];
   return result;
 }
 
@@ -203,14 +220,16 @@ function refresh() {
 
   svg.selectAll(".arc").attr("d", path)
     .attr("opacity", function(d) {
-        return fade_at_edge(d)
-    })
+        return fade_at_edge(d);
+    });
 
   svg.selectAll(".flyer")
-    .attr("d", function(d) { return swoosh(flying_arc(d)) })
-    .attr("opacity", function(d) {
-      return fade_at_edge(d)
+    .attr("d", function(d) {
+      return swoosh(flying_arc(d));
     })
+    .attr("opacity", function(d) {
+      return fade_at_edge(d);
+    });
 }
 
 function fade_at_edge(d) {
@@ -219,7 +238,7 @@ function fade_at_edge(d) {
       start, end;
   // function is called on 2 different data structures..
   if (d.source) {
-    start = d.source,
+    start = d.source;
     end = d.target;
   }
   else {
@@ -230,18 +249,21 @@ function fade_at_edge(d) {
   var start_dist = 1.57 - arc.distance({source: start, target: centerPos}),
       end_dist = 1.57 - arc.distance({source: end, target: centerPos});
 
-  var fade = d3.scale.linear().domain([-.1,0]).range([0,.1])
+  var fade = d3.scale.linear()
+  .domain([-0.1,0])
+  .range([0,0.1]);
+
   var dist = start_dist < end_dist ? start_dist : end_dist;
 
-  return fade(dist)
+  return fade(dist);
 }
 
 function location_along_arc(start, end, loc) {
   var interpolator = d3.geo.interpolate(start,end);
-  return interpolator(loc)
+  return interpolator(loc);
 }
 
-// modified from http://bl.ocks.org/1392560
+
 var m0, o0;
 function mousedown() {
   m0 = [d3.event.pageX, d3.event.pageY];
@@ -250,8 +272,8 @@ function mousedown() {
 }
 function mousemove() {
   if (m0) {
-    var m1 = [d3.event.pageX, d3.event.pageY]
-      , o1 = [o0[0] + (m1[0] - m0[0]) / 6, o0[1] + (m0[1] - m1[1]) / 6];
+    var m1 = [d3.event.pageX, d3.event.pageY];
+    o1 = [o0[0] + (m1[0] - m0[0]) / 6, o0[1] + (m0[1] - m1[1]) / 6];
     o1[1] = o1[1] > 30  ? 30  :
             o1[1] < -30 ? -30 :
             o1[1];
@@ -265,9 +287,4 @@ function mouseup() {
     mousemove();
     m0 = null;
   }
-}
-
-function modes() {
-    return this.width() <= 900 ||
-      d3.orthographic().scale(300);
 }

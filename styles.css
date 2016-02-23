@@ -95,10 +95,12 @@ i {
   height: 100px;
   float: right;
   margin: 20px 0;
+  background-color: lightblue;
 }
 
 .bars div h2 {
   float: right;
+  margin: 15px;
 }
 
 .earth {
