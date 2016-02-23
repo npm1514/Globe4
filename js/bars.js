@@ -4,7 +4,6 @@ angular.module("world").controller("bars", function($scope) {
 
     var text = ["Total Students", "States", "Countries", "", "Out of State Retention", "Total Jobs"];
 
-    console.log(d3.select('.bars'));
     d3.select('.bars')
     .selectAll('div')
     .data(data)

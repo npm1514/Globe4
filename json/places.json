@@ -1,73 +1,27 @@
 {
-  "type": "FeatureCollection",
 
   "features": [{
       "type": "Feature",
-      "properties": {
-        "scalerank": 0,
-        "labelrank": 0,
-        "featurecla": "Admin-0 capital",
-        "name": "Singapore",
-        "nameascii": "Singapore",
-        "adm0name": "Singapore",
-        "adm0_a3": "SGP",
-        "adm1name": null,
-        "iso_a2": "SG",
-        "note": null,
-        "latitude": 1.29303346649,
-        "longitude": 103.855820678,
-        "changed": 0.0,
-        "namediff": 0,
-        "diffnote": null,
-        "pop_max": 5183700,
-        "pop_min": 3289529,
-        "pop_other": 3314179,
-        "rank_max": 13,
-        "rank_min": 12,
-        "geonameid": 1880252.0,
-        "meganame": "Singapore",
-        "ls_name": "Singapore",
-        "ls_match": 1,
-        "checkme": 5
-      },
-      "geometry": {
+      "geometryfrom": {
+        "city": "Chicago",
+        "state": "IL",
+        "country": "USA",
         "type": "Point",
-        "coordinates": [103.853874819099019, 1.294979325105942]
-      }
-    }, {
-      "type": "Feature",
-      "properties": {
-        "scalerank": 0,
-        "labelrank": 0,
-        "featurecla": "Admin-0 region capital",
-        "name": "Hong Kong",
-        "nameascii": "Hong Kong",
-        "adm0name": "Hong Kong S.A.R.",
-        "adm0_a3": "HKG",
-        "adm1name": null,
-        "iso_a2": "HK",
-        "note": null,
-        "latitude": 22.304980895,
-        "longitude": 114.185009317,
-        "changed": 0.0,
-        "namediff": 0,
-        "diffnote": null,
-        "pop_max": 7206000,
-        "pop_min": 4551579,
-        "pop_other": 4549026,
-        "rank_max": 13,
-        "rank_min": 12,
-        "geonameid": 1819729.0,
-        "meganame": "Hong Kong",
-        "ls_name": "Hong Kong",
-        "ls_match": 1,
-        "checkme": 0
+        "coordinates": [-87.6847, 41.8369]
       },
-      "geometry": {
+      "geometrycamp": {
         "type": "Point",
-        "coordinates": [114.183063458463039, 22.30692675357551]
+        "coordinates": [-111.6608, 40.2444],
+        "city": "Provo",
+        "state": "UT",
+        "country": "USA"
+      },
+      "geometryto": {
+        "type": "Point",
+        "coordinates": [-117.1625, 32.7150],
+        "city": "San Diego",
+        "state": "CA",
+        "country": "USA"
       }
-    }
-
-  ]
+  }]
 }

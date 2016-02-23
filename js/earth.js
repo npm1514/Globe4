@@ -42,8 +42,8 @@ var swoosh = d3.svg.line()
       .interpolate("cardinal")//type of lines, may be straight, ,linear, with a peek, or just rounded like we have
       .tension(-0.05);//curvature of arc lines -1 to 1
 
-var links = [],
-    arcLines = [];
+var linkcamp = [],
+    linkjob = [];
 
 
 var svg = d3.select(".earth").append("svg")
@@ -136,23 +136,6 @@ function ready(error, world, places) {
     .attr("class", "land noclicks")
     .attr("d", path);
 
-d3.json("json/usa.json", function(error, us) {
-  if (error) throw error;
-
-//of usa
-  svg.insert("path")
-    .datum(topojson.feature(us, us.objects.land))
-    .attr("class", "land")
-    .attr("d", path);
-
-  svg.insert("path")
-    .datum(topojson.mesh(us, us.objects.states, function(a, b) {
-      return a !== b;
-    }))
-    .attr("class", "state-boundary")
-    .attr("d", path);
-
-});
 //of globe highlight
   svg.append("circle")
     .attr("cx", width / 2)
@@ -178,50 +161,66 @@ d3.json("json/usa.json", function(error, us) {
       .attr("d", path);
 
   // spawn links between cities as source/target coord pairs
-  //start again here
   places.features.forEach(function(a) {
-    places.features.forEach(function(b) {
-      if (a !== b) {
-        links.push({
-          source: a.geometry.coordinates,
-          target: b.geometry.coordinates
+        linkcamp.push({
+          "source": a.geometryfrom.coordinates,
+          "target": a.geometrycamp.coordinates
         });
-      }
-    });
+        linkjob.push({
+          "source": a.geometrycamp.coordinates,
+          "target": a.geometryto.coordinates
+        });
   });
 
-  // build arclines features from links array
-  links.forEach(function(e,i,a) {
-    var feature = {
-      "type": "Feature",
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [e.source,e.target]
-      }
-    };
 
-    console.log(feature);
-    arcLines.push(feature);
-    console.log(arcLines);
-  });
+
+  // create shadow definition
+  // links.forEach(function(e,i,a) {
+  //
+  //   var feature = {
+  //     "type": "Feature",
+  //     "geometry": {
+  //       "type": "LineString",
+  //       "coordinates": [e.source,e.target]
+  //     }
+  //   };
+  //   arcLines.push(feature);
+  // });
+
+//append arc shadows
+  // svg.append("g")
+  //   .attr("class","arcs")
+  //   .selectAll("path")
+  //   .data(arcLines)
+  //   .enter().append("path")
+  //   .attr("class","arc")
+  //   .attr("d",path);
 
   svg.append("g")
-    .attr("class","arcs")
+    .attr("class","flyin")
     .selectAll("path")
-    .data(arcLines)
-    .enter().append("path")
-    .attr("class","arc")
-    .attr("d",path);
+    .data(linkcamp)
+    .enter()
+    .append("path")
 
-  svg.append("g").attr("class","flyers")
-    .selectAll("path").data(links)
-    .enter().append("path")
+    .attr("class","flyer")
+    .attr("d", function(d) {
+      return swoosh(flying_arc(d));
+    });
+  svg.append("g")
+    .attr("class","flyout")
+    .selectAll("path")
+    .data(linkjob)
+    .enter()
+    .append("path")
     .attr("class","flyer")
     .attr("d", function(d) {
       return swoosh(flying_arc(d));
     });
   refresh();
 }
+
+
 
 function flying_arc(pts) {
   var source = pts.source,

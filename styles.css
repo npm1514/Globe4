@@ -25,22 +25,21 @@
   opacity:.6;
 }
 
-/*arc shadow*/
-.arcs {
-  opacity:.1;
-  stroke: #ff5722;
-  stroke-width: 2;
-}
-
 /*arcs*/
-.flyers {
+.flyin {
   stroke-width:.5;
   opacity: .8;
-  stroke: #ff5722;
+  stroke: gold;
+}
+
+.flyout {
+  stroke-width:.5;
+  opacity: .8;
+  stroke: purple;
 }
 
 /*connect arc to shadow*/
-.arc, .flyer {
+.arc, .flyin, .flyout {
   stroke-linejoin: round;
   fill:none;
 }
