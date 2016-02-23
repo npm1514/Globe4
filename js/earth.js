@@ -196,17 +196,19 @@ function ready(error, world, places) {
   //   .attr("class","arc")
   //   .attr("d",path);
 
+//create flyin arcs
   svg.append("g")
     .attr("class","flyin")
     .selectAll("path")
     .data(linkcamp)
     .enter()
     .append("path")
-
     .attr("class","flyer")
     .attr("d", function(d) {
       return swoosh(flying_arc(d));
     });
+
+//create flyout arcs
   svg.append("g")
     .attr("class","flyout")
     .selectAll("path")
@@ -226,7 +228,7 @@ function flying_arc(pts) {
   var source = pts.source,
       target = pts.target;
 
-  var mid = location_along_arc(source, target, 0.5);
+  var mid = location_along_arc(source, target, 0.5);//sets values for creating arc, start point, mid point, and end point
   var result = [ proj(source),
                  sky(mid),
                  proj(target)
