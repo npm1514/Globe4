@@ -15,17 +15,21 @@ var width = 880,
 //view of earth
 var proj = d3.geo.orthographic()
     .translate([width / 2, height / 2])//position of earth on page
-    .clipAngle(90)
-    .scale(390);//size of projection
+    .clipAngle(90)//determines projection of map on globe
+    .scale(390)
+    .rotate([104,-30]);//size of projection
 
 //view of sky
 var sky = d3.geo.orthographic()
     .translate([width / 2, height / 2])//position of sky on page
     .clipAngle(90)
-    .scale(500);//size of projection
+    .scale(500)
+    .rotate([104,-30]);//size of projection
 
 //location points
-var path = d3.geo.path().projection(proj).pointRadius(1.5);
+var path = d3.geo.path()
+.projection(proj)
+.pointRadius(1.5);
 
 //function for projection of arc lines
 var swoosh = d3.svg.line()
@@ -74,7 +78,7 @@ function ready(error, world, places) {
         .attr("cy", "25%");//light position y direction
       globe_highlight.append("stop")
         .attr("offset", "5%")
-        .attr("stop-color", "#ffd")//light color
+        .attr("stop-color", "#fff")//light color
         .attr("stop-opacity","0.6");
       globe_highlight.append("stop")
         .attr("offset", "100%")
@@ -132,6 +136,23 @@ function ready(error, world, places) {
     .attr("class", "land noclicks")
     .attr("d", path);
 
+d3.json("json/usa.json", function(error, us) {
+  if (error) throw error;
+
+//of usa
+  svg.insert("path")
+    .datum(topojson.feature(us, us.objects.land))
+    .attr("class", "land")
+    .attr("d", path);
+
+  svg.insert("path")
+    .datum(topojson.mesh(us, us.objects.states, function(a, b) {
+      return a !== b;
+    }))
+    .attr("class", "state-boundary")
+    .attr("d", path);
+
+});
 //of globe highlight
   svg.append("circle")
     .attr("cx", width / 2)
@@ -270,6 +291,8 @@ function mousedown() {
   o0 = proj.rotate();
   d3.event.preventDefault();
 }
+
+//function used to update rotational position based on click and drag position
 function mousemove() {
   if (m0) {
     var m1 = [d3.event.pageX, d3.event.pageY];
@@ -282,6 +305,7 @@ function mousemove() {
     refresh();
   }
 }
+//ends click and drag of earth
 function mouseup() {
   if (m0) {
     mousemove();
