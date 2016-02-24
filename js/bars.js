@@ -15,6 +15,8 @@ angular.module("world").controller("bars", function($scope, mainService) {
     });
       var stateArray = [];
       var countryArray = [];
+      var retentionCount = 0;
+      var jobs = 0;
       for(var i = 0; i < mainService.cohorts.length; i++) {
 
         $scope.data[0] = $scope.data[0] + mainService.cohorts[i].people.length;
@@ -22,10 +24,17 @@ angular.module("world").controller("bars", function($scope, mainService) {
         for (var j = 0; j < mainService.cohorts[i].people.length; j++) {
           stateArray.push(mainService.cohorts[i].people[j].fromstate);
           countryArray.push(mainService.cohorts[i].people[j].fromcountry);
+          if (mainService.cohorts[i].people[j].job) {
+            jobs++;
+          }
+          if (mainService.cohorts[i].people[j].tostate === "UT") {
+            retentionCount++;
+          }
         }
       }
-      console.log(stateArray);
-      console.log(countryArray);
+      console.log(jobs);
+      $scope.data[4] = (jobs/($scope.data[0])*100).toFixed(0);
+      $scope.data[3] = (retentionCount/($scope.data[0])*100).toFixed(0);
 
       for (var k = 0; k < stateArray.length; k++) {
         for (var l = k + 1; l < stateArray.length; l++) {
@@ -35,7 +44,6 @@ angular.module("world").controller("bars", function($scope, mainService) {
           }
         }
       }
-      console.log(stateArray);
       $scope.data[1] = stateArray.length;
 
       for (var m = 0; m < countryArray.length; m++) {
@@ -46,7 +54,6 @@ angular.module("world").controller("bars", function($scope, mainService) {
           }
         }
       }
-      console.log(countryArray);
       $scope.data[2]= countryArray.length;
 
       d3.select('.bars')

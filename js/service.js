@@ -30,19 +30,42 @@ angular.module("world").service("mainService", function() {
           "fromstate": "VA",
           "fromcountry": "USA",
           "job": false,
-          "tostate": "VA"
+          "tostate": "UT"
         },
         {
           "fromstate": "OR",
           "fromcountry": "USA",
           "job": true,
-          "tostate": "OR"
+          "tostate": "UT"
         },
         {
           "fromstate": "England",
           "fromcountry": "UK",
           "job": true,
           "tostate": "FL"
+        }
+      ]
+    },
+    {
+      "cohortNum": "DM3",
+      "people": [
+        {
+          "fromstate": "MD",
+          "fromcountry": "USA",
+          "job": true,
+          "tostate": "MD"
+        },
+        {
+          "fromstate": "WA",
+          "fromcountry": "USA",
+          "job": true,
+          "tostate": "UT"
+        },
+        {
+          "fromstate": "Mosgow",
+          "fromcountry": "RS",
+          "job": true,
+          "tostate": "UT"
         }
       ]
     }
