@@ -157,6 +157,17 @@ i {
   margin: 20px;
 }
 
+.scrollbar {
+  position: fixed;
+  top: 20px;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 500px;
+  height: 200px;
+  z-index: 100;
+}
+
 
 @media only screen and (max-width: 1200px) {
   .bars {

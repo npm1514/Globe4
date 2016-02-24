@@ -12,7 +12,7 @@
     <script src="plugins/topojson.v1.min.js"></script>
 
   </head>
-  <body ng-controller="earth">
+  <body >
     <div class="head">
       <h2>DevMountain: Time Lapse</h2>
       <i class="fa fa-toggle-down" ng-hide="open" ng-click="open=true"><h5>More Info</h5></i>
@@ -29,10 +29,15 @@
       </div>
 
     </div>
-    <div class="earth">
 
-
+    <div class="scrollbar" ng-controller="scrollbar">
+      
     </div>
+
+    <div class="earth" ng-controller="earth">
+    </div>
+
+
     <div class="bars" ng-controller="bars">
       <div class="students"><h2>({{data[0]}}) Students</h2></div>
       <div class="states"><h2>({{data[1]}}) States</h2></div>
@@ -47,6 +52,7 @@
     <script src="js/mainCtrl.js"></script>
     <script src="js/earth.js"></script>
     <script src="js/bars.js"></script>
+    <script src="js/scrollbar.js"></script>
     <script src="js/service.js"></script>
 
   </body>

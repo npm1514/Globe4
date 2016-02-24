@@ -45,9 +45,6 @@ angular.module("world").controller("earth", function($scope) {
       .scale(scale*1.3)
       .rotate([104,-30]);//size of projection
 
-
-
-
   //location points
   var path = d3.geo.path()
   .projection(proj);
@@ -67,8 +64,9 @@ angular.module("world").controller("earth", function($scope) {
       linkjob = [];
       arcLines = [];
 
-
-  var svg = d3.select(".earth").append("svg")
+  //earth svg definition
+  var svg = d3.select(".earth")
+    .append("svg")
     .attr("width", width)
     .attr("height", height)
     .on("mousedown", mousedown);
@@ -81,7 +79,6 @@ angular.module("world").controller("earth", function($scope) {
 
 
   function ready(error, world, places) {
-    console.log(world);
     //ocean fill
     var ocean_fill = svg.append("defs").append("radialGradient")
         .attr("id", "ocean_fill")
@@ -136,7 +133,8 @@ angular.module("world").controller("earth", function($scope) {
           .attr("stop-color", "#fff")
           .attr("stop-opacity","0");
 
-  //actually append svgs
+//actually append svgs
+
   //of shadow
     svg.append("ellipse")
       .attr("cx", 450)
@@ -154,11 +152,6 @@ angular.module("world").controller("earth", function($scope) {
       .style("fill", "url(#ocean_fill)");
 
   //of land
-    svg.append("path")
-      .datum(topojson.feature(world, world.objects.land))
-      .attr("class", "land noclicks")
-      .attr("d", path);
-
     svg.append("path")
       .datum(topojson.feature(world, world.objects.countries))
       .attr("class", "land noclicks")
