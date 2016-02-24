@@ -2,15 +2,20 @@ angular.module("world").controller("earth", function($scope) {
 
   var scale = 350;
 
+
   $scope.zoomin = function () {
     scale = scale + 50;
+    proj.scale(scale);
+    sky.scale(scale);
+    refresh();
   };
 
   $scope.zoomout = function () {
     scale = scale - 50;
-    console.log(scale);
+    proj.scale(scale);
+    sky.scale(scale);
+    refresh();
   };
-
 
   //establish mouse move variable
   d3.select(window)
@@ -19,8 +24,6 @@ angular.module("world").controller("earth", function($scope) {
 
   var width = 1300,
       height = 1000;
-
-
 
   //view of earth
   var proj = d3.geo.orthographic()
@@ -272,7 +275,9 @@ angular.module("world").controller("earth", function($scope) {
   function refresh() {
     svg.selectAll(".land")
     .attr("d", path);
-    // svg.selectAll(".point").attr("d", path);
+
+    svg.selectAll(".noclicks")
+    .attr("r", proj.scale());
 
     svg.selectAll(".arc")
     .attr("d", path)
