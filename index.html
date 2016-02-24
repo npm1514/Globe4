@@ -10,9 +10,10 @@
     <script src="plugins/d3.v3.min.js"></script>
     <script src="plugins/queue.v1.min.js"></script>
     <script src="plugins/topojson.v1.min.js"></script>
+    <script src="plugins/d3.geo.tile.min.js"></script>
 
   </head>
-  <body ng-controller="mainCtrl">
+  <body ng-controller="earth">
     <div class="head">
       <h2>DevMountain: Time Lapse</h2>
       <i class="fa fa-toggle-down" ng-hide="open" ng-click="open=true"><h5>More Info</h5></i>
@@ -23,15 +24,20 @@
         <p>The bars on the right are a display of some specific statistics related to total student count,  where they came from, out of state retention rate, and job placement after completion of the course.</p>
         <p class="infoexit" ng-click="open=false">x</p>
       </div>
+      <div class="zoom"">
+        <i class="fa fa-plus-square-o fa-3x" ng-click="zoomin()"></i><br>
+        <i class="fa fa-minus-square-o fa-3x" ng-click="zoomout()"></i>
+      </div>
+
     </div>
-    <div class="earth" ng-controller="earth">
+    <div class="earth">
+
 
     </div>
     <div class="bars" ng-controller="bars">
       <div class="students"><h2>Total Students</h2></div>
       <div class="states"><h2>States</h2></div>
       <div class="countries"><h2>Countries</h2></div>
-      <div class="blank"></div>
       <div class="retention"><h2>Retention</h2></div>
       <div class="jobs"><h2>Total Jobs</h2></div>
 

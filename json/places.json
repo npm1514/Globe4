@@ -95,5 +95,53 @@
         "state": "MD",
         "country": "USA"
       }
+  },
+  {
+      "type": "Feature",
+      "geometryfrom": {
+        "city": "Bogota",
+        "state": "Cundinamarca",
+        "country": "Colombia",
+        "type": "Point",
+        "coordinates": [-74.0758, 4.5981]
+      },
+      "geometrycamp": {
+        "type": "Point",
+        "coordinates": [-111.6608, 40.2444],
+        "city": "Provo",
+        "state": "UT",
+        "country": "USA"
+      },
+      "geometryto": {
+        "type": "Point",
+        "coordinates": [-111.8833, 40.7500],
+        "city": "Salt Lake City",
+        "state": "UT",
+        "country": "USA"
+      }
+  },
+  {
+      "type": "Feature",
+      "geometryfrom": {
+        "city": "Moscow",
+        "state": "NA",
+        "country": "Russia",
+        "type": "Point",
+        "coordinates": [37.6167, 55.75]
+      },
+      "geometrycamp": {
+        "type": "Point",
+        "coordinates": [-111.6608, 40.2444],
+        "city": "Provo",
+        "state": "UT",
+        "country": "USA"
+      },
+      "geometryto": {
+        "type": "Point",
+        "coordinates": [40, 60],
+        "city": "Salt Lake City",
+        "state": "NA",
+        "country": "Russia"
+      }
   }]
 }

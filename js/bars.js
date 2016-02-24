@@ -1,8 +1,8 @@
 angular.module("world").controller("bars", function($scope) {
 
-    var data = [5, 15, 5, 25, 35, 10];
+    var data = [5, 15, 5, 35, 10];
 
-    var text = ["Total Students", "States", "Countries", "", "Out of State Retention", "Total Jobs"];
+    var text = ["Total Students", "States", "Countries", "Out of State Retention", "Total Jobs"];
 
     d3.select('.bars')
     .selectAll('div')
@@ -14,7 +14,7 @@ angular.module("world").controller("bars", function($scope) {
       return 0;
     });
 
-    data = [75, 40, 20, 0, 50, 60];
+    data = [75, 40, 20, 50, 60];
 
     d3.select('.bars')
     .selectAll('div')

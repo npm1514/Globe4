@@ -23,11 +23,12 @@
 /*location point*/
 .point {
   opacity:.6;
+  stroke: red;
 }
 
 /*arcs*/
 .flyin {
-  stroke-width:.5;
+  stroke-width:1;
   opacity: .8;
   stroke: gold;
 }
@@ -36,6 +37,13 @@
   stroke-width:.5;
   opacity: .8;
   stroke: purple;
+}
+
+.arc {
+  stroke: black;
+  stroke-width: 0.3;
+  opacity: 0.3;
+  fill: none;
 }
 
 /*connect arc to shadow*/
@@ -86,20 +94,21 @@ i {
 .bars {
   width: calc(100% - 880px);
   height: 860px;
-  display: inline-block;
-  float: right;
+  position: fixed;
+  top:0;
+  right:0;
 }
 .bars div {
   clear: both;
-  height: 100px;
+  height: 16vh;
   float: right;
-  margin: 20px 0;
+  margin: 2vh 0;
   background-color: lightblue;
 }
 
 .bars div h2 {
   float: right;
-  margin: 15px;
+  padding: 4vh 10px;
 }
 
 .earth {
@@ -115,7 +124,7 @@ i {
   bottom:0;
   margin: auto;
   width: 400px;
-  height: 300px;
+  height: max-content;
   background-color: #8d8d8d;
   opacity: .8;
   border-radius: 5px;
@@ -141,6 +150,10 @@ i {
   border-bottom: 2px solid #fff;
 }
 
+.zoom {
+  margin: 20px;
+}
+
 
 @media only screen and (max-width: 1200px) {
   .bars {
@@ -148,5 +161,11 @@ i {
   }
   svg {
     float: left;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .moreinfo {
+    width: 80%;
   }
 }
