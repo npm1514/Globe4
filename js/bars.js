@@ -1,33 +1,64 @@
-angular.module("world").controller("bars", function($scope) {
+angular.module("world").controller("bars", function($scope, mainService) {
 
-    var data = [5, 15, 5, 35, 10];
+    $scope.data = [0, 0, 0, 0, 0];
 
     var text = ["Total Students", "States", "Countries", "Out of State Retention", "Total Jobs"];
 
     d3.select('.bars')
     .selectAll('div')
-    .data(data)
+    .data($scope.data)
     .enter()
     .append('div')
     .text(text)
     .style('width', function(d,i){
       return 0;
     });
+      var stateArray = [];
+      var countryArray = [];
+      for(var i = 0; i < mainService.cohorts.length; i++) {
 
-    data = [75, 40, 20, 50, 60];
+        $scope.data[0] = $scope.data[0] + mainService.cohorts[i].people.length;
 
-    d3.select('.bars')
-    .selectAll('div')
-    .data(data)
-    .transition()
-    .duration(4000)
-    .style('width', function(d,i){
-      return d + '%';
-    })
-    .style('background-color', function(d,i){
-      return d3.hsl(i/data.length*360,0.5,0.5);
-    });
+        for (var j = 0; j < mainService.cohorts[i].people.length; j++) {
+          stateArray.push(mainService.cohorts[i].people[j].fromstate);
+          countryArray.push(mainService.cohorts[i].people[j].fromcountry);
+        }
+      }
+      console.log(stateArray);
+      console.log(countryArray);
 
+      for (var k = 0; k < stateArray.length; k++) {
+        for (var l = k + 1; l < stateArray.length; l++) {
+          if (stateArray[l] === stateArray[k]) {
+            stateArray.splice(l, 1);
+            l--;
+          }
+        }
+      }
+      console.log(stateArray);
+      $scope.data[1] = stateArray.length;
 
+      for (var m = 0; m < countryArray.length; m++) {
+        for (var n = m + 1; n < countryArray.length; n++) {
+          if (countryArray[n] === countryArray[m]) {
+            countryArray.splice(n, 1);
+            n--;
+          }
+        }
+      }
+      console.log(countryArray);
+      $scope.data[2]= countryArray.length;
+
+      d3.select('.bars')
+      .selectAll('div')
+      .data($scope.data)
+      .transition()
+      .duration(4000)
+      .style('width', function(d,i){
+        return d + '%';
+      })
+      .style('background-color', function(d,i){
+        return d3.hsl(i/$scope.data.length*360,0.5,0.5);
+      });
 
 });

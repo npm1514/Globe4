@@ -1,9 +1,12 @@
 angular.module("world").controller("earth", function($scope) {
 
-  var scale = 350;
+  var scale = 400;
 
 
   $scope.zoomin = function () {
+    if (scale > 1500) {
+      return;
+    }
     scale = scale + 50;
     proj.scale(scale);
     sky.scale(scale);
@@ -11,6 +14,9 @@ angular.module("world").controller("earth", function($scope) {
   };
 
   $scope.zoomout = function () {
+    if (scale < 101) {
+      return;
+    }
     scale = scale - 50;
     proj.scale(scale);
     sky.scale(scale);
@@ -27,14 +33,14 @@ angular.module("world").controller("earth", function($scope) {
 
   //view of earth
   var proj = d3.geo.orthographic()
-      .translate([width / 2.5, height / 2])//position of earth on page
+      .translate([width / 2.5, height / 2.25])//position of earth on page
       .clipAngle(90)//determines projection of map on globe
       .scale(scale)
       .rotate([104,-30]);//size of projection
 
   //view of sky
   var sky = d3.geo.orthographic()
-      .translate([width / 2.5, height / 2])//position of sky on page
+      .translate([width / 2.5, height / 2.25])//position of sky on page
       .clipAngle(90)
       .scale(scale*1.3)
       .rotate([104,-30]);//size of projection
@@ -63,23 +69,24 @@ angular.module("world").controller("earth", function($scope) {
 
 
   var svg = d3.select(".earth").append("svg")
-              .attr("width", width)
-              .attr("height", height)
-              .on("mousedown", mousedown);
+    .attr("width", width)
+    .attr("height", height)
+    .on("mousedown", mousedown);
 
   //call in json of world svg and coordinates
   queue()
-      .defer(d3.json, "json/world-110m.json")
-      .defer(d3.json, "json/places.json")
-      .await(ready);
+    .defer(d3.json, "json/world-110m.json")
+    .defer(d3.json, "json/places.json")
+    .await(ready);
 
 
   function ready(error, world, places) {
+    console.log(world);
     //ocean fill
     var ocean_fill = svg.append("defs").append("radialGradient")
-          .attr("id", "ocean_fill")
-          .attr("cx", "75%")//light position x direction
-          .attr("cy", "25%");//light position y direction
+        .attr("id", "ocean_fill")
+        .attr("cx", "75%")//light position x direction
+        .attr("cy", "25%");//light position y direction
         ocean_fill.append("stop")
         .attr("offset", "5%")
         .attr("stop-color", "lightblue");//light color
@@ -90,17 +97,17 @@ angular.module("world").controller("earth", function($scope) {
     //globe fill
     var globe_highlight = svg.append("defs")
         .append("radialGradient")
-          .attr("id", "globe_highlight")
-          .attr("cx", "75%")//light position x direction
-          .attr("cy", "25%");//light position y direction
+        .attr("id", "globe_highlight")
+        .attr("cx", "75%")//light position x direction
+        .attr("cy", "25%");//light position y direction
         globe_highlight.append("stop")
-          .attr("offset", "5%")
-          .attr("stop-color", "#fff")//light color
-          .attr("stop-opacity","0.6");
+        .attr("offset", "5%")
+        .attr("stop-color", "#fff")//light color
+        .attr("stop-opacity","0.6");
         globe_highlight.append("stop")
-          .attr("offset", "100%")
-          .attr("stop-color", "#000")//background-color
-          .attr("stop-opacity","0.2");
+        .attr("offset", "100%")
+        .attr("stop-color", "#000")//background-color
+        .attr("stop-opacity","0.2");
 
     //globe shading
     var globe_shading = svg.append("defs").append("radialGradient")
@@ -113,7 +120,7 @@ angular.module("world").controller("earth", function($scope) {
           .attr("stop-opacity","0");
         globe_shading.append("stop")
           .attr("offset","100%").attr("stop-color", "#000")
-          .attr("stop-opacity","0.4");
+          .attr("stop-opacity","0.6");
 
     //some other shadow
     var drop_shadow = svg.append("defs").append("radialGradient")
@@ -134,15 +141,14 @@ angular.module("world").controller("earth", function($scope) {
     svg.append("ellipse")
       .attr("cx", 450)
       .attr("cy", 450)
-      .attr("rx", proj.scale()*0.90)
-      .attr("ry", proj.scale()*0.25)
+      .attr("r", proj.scale()*1.5)
       .attr("class", "noclicks")
       .style("fill", "url(#drop_shadow)");
 
   //of ocean
     svg.append("circle")
       .attr("cx", width / 2.5)
-      .attr("cy", height / 2)
+      .attr("cy", height / 2.25)
       .attr("r", proj.scale())
       .attr("class", "noclicks")
       .style("fill", "url(#ocean_fill)");
@@ -153,10 +159,15 @@ angular.module("world").controller("earth", function($scope) {
       .attr("class", "land noclicks")
       .attr("d", path);
 
+    svg.append("path")
+      .datum(topojson.feature(world, world.objects.countries))
+      .attr("class", "land noclicks")
+      .attr("d", path);
+
   //of globe highlight
     svg.append("circle")
       .attr("cx", width / 2.5)
-      .attr("cy", height / 2)
+      .attr("cy", height / 2.25)
       .attr("r", proj.scale())
       .attr("class","noclicks")
       .style("fill", "url(#globe_highlight)");
@@ -164,11 +175,10 @@ angular.module("world").controller("earth", function($scope) {
   //of globe shading
     svg.append("circle")
       .attr("cx", width / 2.5)
-      .attr("cy", height / 2)
+      .attr("cy", height / 2.25)
       .attr("r", proj.scale())
       .attr("class","noclicks")
       .style("fill", "url(#globe_shading)");
-
 
   //of globe points
     // svg.append("g")
@@ -228,8 +238,6 @@ angular.module("world").controller("earth", function($scope) {
       .attr("class","arc")
       .attr("d",path);
 
-
-
   //create flyin arcs
     svg.append("g")
       .attr("class","flyin")
@@ -256,8 +264,6 @@ angular.module("world").controller("earth", function($scope) {
     refresh();
   }
 
-
-
   //sets values for creating arc, start point, mid point, and end point
   function flying_arc(pts) {
     var source = pts.source,
@@ -270,7 +276,6 @@ angular.module("world").controller("earth", function($scope) {
                  ];
     return result;
   }
-
 
   function refresh() {
     svg.selectAll(".land")
@@ -353,6 +358,5 @@ angular.module("world").controller("earth", function($scope) {
       m0 = null;
     }
   }
-
 
 });

@@ -34,19 +34,20 @@
 
     </div>
     <div class="bars" ng-controller="bars">
-      <div class="students"><h2>Total Students</h2></div>
-      <div class="states"><h2>States</h2></div>
-      <div class="countries"><h2>Countries</h2></div>
-      <div class="retention"><h2>Retention</h2></div>
-      <div class="jobs"><h2>Total Jobs</h2></div>
+      <div class="students"><h2>({{data[0]}}) Students</h2></div>
+      <div class="states"><h2>({{data[1]}}) States</h2></div>
+      <div class="countries"><h2>({{data[2]}}) Countries</h2></div>
+      <div class="retention"><h2>({{data[3]}}) Retention</h2></div>
+      <div class="jobs"><h2>({{data[4]}}) Jobs</h2></div>
 
-    </div>
+    </div>{{data[0]}}-
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
     <script src="js/app.js"></script>
     <script src="js/mainCtrl.js"></script>
     <script src="js/earth.js"></script>
     <script src="js/bars.js"></script>
+    <script src="js/service.js"></script>
 
   </body>
 </html>

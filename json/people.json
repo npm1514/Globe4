@@ -1,0 +1,22 @@
+{
+  "persons": {[
+    {
+      "fromstate": "NY",
+      "fromcountry": "USA",
+      "job": true,
+      "tostate": "UT"
+    },
+    {
+      "fromstate": "CA",
+      "fromcountry": "USA",
+      "job": true,
+      "tostate": "CA"
+    },
+    {
+      "fromstate": "ON",
+      "fromcountry": "Canada",
+      "job": true,
+      "tostate": "ON"
+    }
+  ]}
+}

@@ -30,13 +30,13 @@
 .flyin {
   stroke-width:1;
   opacity: .8;
-  stroke: gold;
+  stroke: purple;
 }
 
 .flyout {
   stroke-width:.5;
   opacity: .8;
-  stroke: purple;
+  stroke: gold;
 }
 
 .arc {
@@ -53,7 +53,8 @@
 }
 
 body {
-  background-color: #000;
+  background-image: url("stars.jpg");
+  /*background-color: #000;*/
 }
 
 h2 {
@@ -97,10 +98,11 @@ i {
   position: fixed;
   top:0;
   right:0;
+  margin: 2vh 0;
 }
 .bars div {
   clear: both;
-  height: 16vh;
+  height: 15.5vh;
   float: right;
   margin: 2vh 0;
   background-color: lightblue;
@@ -109,6 +111,7 @@ i {
 .bars div h2 {
   float: right;
   padding: 4vh 10px;
+  width: max-content;
 }
 
 .earth {
