@@ -287,8 +287,8 @@ angular.module("world").service("mainService", function() {
           "geometryto": {
             "coordinates": [40, 60],
             "city": "Salt Lake City",
-            "state": "NA",
-            "country": "Russia"
+            "state": "UT",
+            "country": "USA"
           },
           "job": true
         },
@@ -392,8 +392,8 @@ angular.module("world").service("mainService", function() {
           "geometryto": {
             "coordinates": [40, 60],
             "city": "Salt Lake City",
-            "state": "NA",
-            "country": "Russia"
+            "state": "UT",
+            "country": "USA"
           },
           "job": true
         },
@@ -413,8 +413,8 @@ angular.module("world").service("mainService", function() {
           "geometryto": {
             "coordinates": [40, 60],
             "city": "Salt Lake City",
-            "state": "NA",
-            "country": "Russia"
+            "state": "UT",
+            "country": "USA"
           },
           "job": true
         },
@@ -434,8 +434,8 @@ angular.module("world").service("mainService", function() {
           "geometryto": {
             "coordinates": [40, 60],
             "city": "Salt Lake City",
-            "state": "NA",
-            "country": "Russia"
+            "state": "UT",
+            "country": "USA"
           },
           "job": true
         },
@@ -455,8 +455,8 @@ angular.module("world").service("mainService", function() {
           "geometryto": {
             "coordinates": [40, 60],
             "city": "Salt Lake City",
-            "state": "NA",
-            "country": "Russia"
+            "state": "UT",
+            "country": "USA"
           },
           "job": true
         },
@@ -476,8 +476,8 @@ angular.module("world").service("mainService", function() {
           "geometryto": {
             "coordinates": [40, 60],
             "city": "Salt Lake City",
-            "state": "NA",
-            "country": "Russia"
+            "state": "UT",
+            "country": "USA"
           },
           "job": true
         }
@@ -485,4 +485,5 @@ angular.module("world").service("mainService", function() {
     }
   ];
 
+  
 });

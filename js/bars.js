@@ -1,5 +1,7 @@
 angular.module("world").controller("bars", function($scope, mainService) {
 
+  //***************************bars****************************
+
     $scope.data = [0, 0, 0, 0, 0];
 
     var text = ["Total Students", "States", "Countries", "Out of State Retention", "Total Jobs"];

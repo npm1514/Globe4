@@ -1,7 +1,8 @@
 angular.module("world").controller("earth", function($scope, mainService) {
 
-  var scale = 400;
+//**********************earth********************************
 
+  var scale = 400;
 
   $scope.zoomin = function () {
     if (scale > 1500) {

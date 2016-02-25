@@ -1,5 +1,6 @@
 angular.module("world").controller("scrollbar", function($scope, mainService) {
 
+//********************scrollbar*************************
   //definition of circle drag
   var drag = d3.behavior.drag()
     .origin(Object)
@@ -53,7 +54,7 @@ angular.module("world").controller("scrollbar", function($scope, mainService) {
     // console.log(timeline);
     var timelinerate = ((time / range) * timeline) + start;
     var scrolldate = moment(timelinerate);
-    var cohortupdate = [];
+    $scope.cohortupdate = [];
 
     for (var i = 0; i < mainService.cohorts.length; i++) {
 
@@ -69,13 +70,16 @@ angular.module("world").controller("scrollbar", function($scope, mainService) {
       });
       //if scroll date is greater than the day in the object, include date in object
       if (scrolldate > newstart) {
-        cohortupdate.push(mainService.cohorts[i]);
+        $scope.cohortupdate.push(mainService.cohorts[i]);
       }
-      console.log(cohortupdate);
-      if (scrolldate > moment().set(mainService.cohorts[i].end)) {
+      if (scrolldate > newend) {
+        for (var j = 0; j < $scope.cohortupdate.length; j++) {
+          for (var k = 0; k < $scope.cohortupdate[j].people[k].length; k++) {
+            $scope.cohortupdate[j].people[k].geometryto = {};
+          }
+        }
       }
     }
-
 
     d3.select(this)
         .attr("opacity", 0.6)
