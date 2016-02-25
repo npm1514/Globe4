@@ -2,6 +2,8 @@ angular.module("world").service("mainService", function() {
   this.cohorts = [
     {
       "cohortNum": "DM1",
+      "start": "2014-11-10T10:20:90Z",
+      "end": "2015-03-01T10:20:90Z",
       "people": [
         {
           "fromstate": "NY",
@@ -25,6 +27,8 @@ angular.module("world").service("mainService", function() {
     },
     {
       "cohortNum": "DM2",
+      "start": "2015-01-05T10:20:90Z",
+      "end": "2015-04-20T10:20:90Z",
       "people": [
         {
           "fromstate": "VA",
@@ -48,6 +52,8 @@ angular.module("world").service("mainService", function() {
     },
     {
       "cohortNum": "DM3",
+      "start": "2015-03-02T10:20:90Z",
+      "end": "2015-06-15T10:20:90Z",
       "people": [
         {
           "fromstate": "MD",
@@ -70,5 +76,7 @@ angular.module("world").service("mainService", function() {
       ]
     }
   ];
+
+  this.cohortchanges = this.cohorts;
 
 });

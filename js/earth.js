@@ -4,6 +4,7 @@ angular.module("world").controller("earth", function($scope) {
 
 
   $scope.zoomin = function () {
+    console.log("zoom");
     if (scale > 1500) {
       return;
     }
@@ -36,14 +37,14 @@ angular.module("world").controller("earth", function($scope) {
       .translate([width / 2.5, height / 2.25])//position of earth on page
       .clipAngle(90)//determines projection of map on globe
       .scale(scale)
-      .rotate([104,-30]);//size of projection
+      .rotate([104,-40]);//size of projection
 
   //view of sky
   var sky = d3.geo.orthographic()
       .translate([width / 2.5, height / 2.25])//position of sky on page
       .clipAngle(90)
       .scale(scale*1.3)
-      .rotate([104,-30]);//size of projection
+      .rotate([104,-40]);//size of projection
 
   //location points
   var path = d3.geo.path()
@@ -306,8 +307,8 @@ angular.module("world").controller("earth", function($scope) {
       end = d.geometry.coordinates[1];
     }
 
-    var start_dist = 1.57 - arc.distance({source: start, target: centerPos}),
-        end_dist = 1.57 - arc.distance({source: end, target: centerPos});
+    var start_dist = 2 - arc.distance({source: start, target: centerPos}),
+        end_dist = 1.75 - arc.distance({source: end, target: centerPos});
 
     var fade = d3.scale.linear()
     .domain([-0.1,0])
@@ -336,7 +337,7 @@ angular.module("world").controller("earth", function($scope) {
       var m1 = [d3.event.pageX, d3.event.pageY];
       o1 = [o0[0] + (m1[0] - m0[0]) / 6, o0[1] + (m0[1] - m1[1]) / 6];
       o1[1] = o1[1] > 30  ? 30  :
-              o1[1] < -30 ? -30 :
+              o1[1] < -50 ? -50 :
               o1[1];
       proj.rotate(o1);
       sky.rotate(o1);
