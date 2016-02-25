@@ -44,8 +44,8 @@ angular.module("world").controller("scrollbar", function($scope, mainService) {
     var percentdrag = time/range;
     var start = moment().set({
       "year": 2014,
-      "month": 10,
-      "date": 3
+      "month": 8,
+      "date": 7
     });
     var end = moment();
     // console.log(start);
@@ -53,14 +53,26 @@ angular.module("world").controller("scrollbar", function($scope, mainService) {
     // console.log(timeline);
     var timelinerate = ((time / range) * timeline) + start;
     var scrolldate = moment(timelinerate);
+    var cohortupdate = [];
+
     for (var i = 0; i < mainService.cohorts.length; i++) {
 
+      var newstart = moment().set({
+        "year": parseInt(mainService.cohorts[i].start.slice(0,4)),
+        "month": parseInt(mainService.cohorts[i].start.slice(5,7)) - 1,
+        "date": parseInt(mainService.cohorts[i].start.slice(8,10))
+      });
+      var newend = moment().set({
+        "year": parseInt(mainService.cohorts[i].end.slice(0,4)),
+        "month": parseInt(mainService.cohorts[i].end.slice(5,7)) - 1,
+        "date": parseInt(mainService.cohorts[i].end.slice(8,10))
+      });
       //if scroll date is greater than the day in the object, include date in object
-      if (scrolldate > moment().set(mainService.cohorts[i].start)) {
-
+      if (scrolldate > newstart) {
+        cohortupdate.push(mainService.cohorts[i]);
       }
+      console.log(cohortupdate);
       if (scrolldate > moment().set(mainService.cohorts[i].end)) {
-
       }
     }
 

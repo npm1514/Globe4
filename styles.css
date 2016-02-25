@@ -6,7 +6,7 @@
 .graticule {
   fill: none;
   stroke: black;
-  stroke-width:.5;
+  stroke-width:0.5;
   opacity:.2;
 }
 /*city labels*/
@@ -34,15 +34,15 @@
 }
 
 .flyout {
-  stroke-width:.5;
+  stroke-width:0.5;
   opacity: .8;
   stroke: gold;
 }
 
 .arc {
   stroke: black;
-  stroke-width: 0.3;
-  opacity: 0.3;
+  stroke-width: 0.25;
+  opacity: 0.25;
   fill: none;
 }
 

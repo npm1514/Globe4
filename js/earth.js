@@ -1,10 +1,9 @@
-angular.module("world").controller("earth", function($scope) {
+angular.module("world").controller("earth", function($scope, mainService) {
 
   var scale = 400;
 
 
   $scope.zoomin = function () {
-    console.log("zoom");
     if (scale > 1500) {
       return;
     }
@@ -75,11 +74,10 @@ angular.module("world").controller("earth", function($scope) {
   //call in json of world svg and coordinates
   queue()
     .defer(d3.json, "json/world-110m.json")
-    .defer(d3.json, "json/places.json")
     .await(ready);
 
 
-  function ready(error, world, places) {
+  function ready(error, world) {
     //ocean fill
     var ocean_fill = svg.append("defs").append("radialGradient")
         .attr("id", "ocean_fill")
@@ -186,18 +184,21 @@ angular.module("world").controller("earth", function($scope) {
     //     console.log(places.features);
 
     // spawn links between cities as source/target coord pairs
-    places.features.forEach(function(a) {
-          linkcamp.push({
-            "source": a.geometryfrom.coordinates,
-            "target": a.geometrycamp.coordinates
-          });
-          linkjob.push({
-            "source": a.geometrycamp.coordinates,
-            "target": a.geometryto.coordinates
-          });
+    mainService.cohorts.forEach(function(a) {
+      for(var i = 0; i < a.people.length; i++) {
+        linkcamp.push({
+          "source": a.people[i].geometryfrom.coordinates,
+          "target": a.people[i].geometrycamp.coordinates
+        });
+        linkjob.push({
+          "source": a.people[i].geometrycamp.coordinates,
+          "target": a.people[i].geometryto.coordinates
+        });
+      }
+
     });
 
-    // create shadow definition
+    // populate shadow definition
     linkcamp.forEach(function(e,i,a) {
 
       var feature = {
@@ -319,6 +320,7 @@ angular.module("world").controller("earth", function($scope) {
     return fade(dist);
   }
 
+  //interpolates line for arclines
   function location_along_arc(start, end, loc) {
     var interpolator = d3.geo.interpolate(start,end);
     return interpolator(loc);

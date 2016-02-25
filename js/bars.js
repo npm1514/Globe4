@@ -22,17 +22,16 @@ angular.module("world").controller("bars", function($scope, mainService) {
         $scope.data[0] = $scope.data[0] + mainService.cohorts[i].people.length;
 
         for (var j = 0; j < mainService.cohorts[i].people.length; j++) {
-          stateArray.push(mainService.cohorts[i].people[j].fromstate);
-          countryArray.push(mainService.cohorts[i].people[j].fromcountry);
+          stateArray.push(mainService.cohorts[i].people[j].geometryfrom.state);
+          countryArray.push(mainService.cohorts[i].people[j].geometryfrom.country);
           if (mainService.cohorts[i].people[j].job) {
             jobs++;
           }
-          if (mainService.cohorts[i].people[j].tostate === "UT") {
+          if (mainService.cohorts[i].people[j].geometryto.state === "UT") {
             retentionCount++;
           }
         }
       }
-      console.log(jobs);
       $scope.data[4] = (jobs/($scope.data[0])*100).toFixed(0);
       $scope.data[3] = (retentionCount/($scope.data[0])*100).toFixed(0);
 
