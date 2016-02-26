@@ -1,28 +1,10 @@
-angular.module("world").controller("earth", function($scope, mainService) {
+angular.module("world").controller("earthCtrl", function($scope, $window, mainService, $interval, $rootScope ) {
+
+
 
 //**********************earth********************************
 
   var scale = 400;
-
-  $scope.zoomin = function () {
-    if (scale > 1500) {
-      return;
-    }
-    scale = scale + 50;
-    proj.scale(scale);
-    sky.scale(scale);
-    refresh();
-  };
-
-  $scope.zoomout = function () {
-    if (scale < 101) {
-      return;
-    }
-    scale = scale - 50;
-    proj.scale(scale);
-    sky.scale(scale);
-    refresh();
-  };
 
   //establish mouse move variable
   d3.select(window)
@@ -77,6 +59,10 @@ angular.module("world").controller("earth", function($scope, mainService) {
     .defer(d3.json, "json/world-110m.json")
     .await(ready);
 
+
+
+
+//function to append
 
   function ready(error, world) {
     //ocean fill
@@ -185,79 +171,78 @@ angular.module("world").controller("earth", function($scope, mainService) {
     //     console.log(places.features);
 
     // spawn links between cities as source/target coord pairs
-    mainService.cohorts.forEach(function(a) {
-      for(var i = 0; i < a.people.length; i++) {
-        linkcamp.push({
-          "source": a.people[i].geometryfrom.coordinates,
-          "target": a.people[i].geometrycamp.coordinates
-        });
-        linkjob.push({
-          "source": a.people[i].geometrycamp.coordinates,
-          "target": a.people[i].geometryto.coordinates
-        });
-      }
 
-    });
+    // $interval(function(){console.log($rootScope.cohortupdate);}, 1000);
 
-    // populate shadow definition
-    linkcamp.forEach(function(e,i,a) {
+    $rootScope.cohortupdate = [];
+    console.log($rootScope.cohortupdate);
 
-      var feature = {
-        "type": "Feature",
-        "geometry": {
-          "type": "LineString",
-          "coordinates": [e.source,e.target]
+    $rootScope.$watchCollection('cohortupdate', function() {
+      makearc();
+    },true);
+
+    makearc = function() {
+      console.log("making arcs kind of");
+      $rootScope.cohortupdate.forEach(function(a) {
+        for(var i = 0; i < a.people.length; i++) {
+          linkcamp.push({
+            "source": a.people[i].geometryfrom.coordinates,
+            "target": a.people[i].geometrycamp.coordinates
+          });
+          linkjob.push({
+            "source": a.people[i].geometrycamp.coordinates,
+            "target": a.people[i].geometryto.coordinates
+          });
         }
-      };
-      arcLines.push(feature);
-    });
-
-    linkjob.forEach(function(e,i,a) {
-
-      var feature = {
-        "type": "Feature",
-        "geometry": {
-          "type": "LineString",
-          "coordinates": [e.source,e.target]
-        }
-      };
-      arcLines.push(feature);
-    });
-
-  // append arc shadows
-    svg.append("g")
-      .attr("class","arcs")
-      .selectAll("path")
-      .data(arcLines)
-      .enter()
-      .append("path")
-      .attr("class","arc")
-      .attr("d",path);
-
-  //create flyin arcs
-    svg.append("g")
-      .attr("class","flyin")
-      .selectAll("path")
-      .data(linkcamp)
-      .enter()
-      .append("path")
-      .attr("class","flyer")
-      .attr("d", function(d) {
-        return swoosh(flying_arc(d));
       });
 
-  //create flyout arcs
-    svg.append("g")
-      .attr("class","flyout")
-      .selectAll("path")
-      .data(linkjob)
-      .enter()
-      .append("path")
-      .attr("class","flyer")
-      .attr("d", function(d) {
-        return swoosh(flying_arc(d));
-      });
-    refresh();
+      // append arc shadows
+        svg.append("g")
+          .attr("class","arcs")
+          .selectAll("path")
+          .data(arcLines)
+          .enter()
+          .append("path")
+          .attr("class","arc")
+          .attr("d",path);
+
+      //create flyin arcs
+        svg.append("g")
+          .attr("class","flyin")
+          .selectAll("path")
+          .data(linkcamp)
+          .enter()
+          .append("path")
+          .attr("class","flyer")
+          .attr("d", function(d) {
+            return swoosh(flying_arc(d));
+          });
+
+      //create flyout arcs
+        svg.append("g")
+          .attr("class","flyout")
+          .selectAll("path")
+          .data(linkjob)
+          .enter()
+          .append("path")
+          .attr("class","flyer")
+          .attr("d", function(d) {
+            return swoosh(flying_arc(d));
+          });
+
+      refresh();
+    };
+
+    var swoosh = d3.svg.line()
+          .x(function(d) {
+            return d[0];
+          })
+          .y(function(d) {
+            return d[1];
+          })
+          .interpolate("cardinal")//type of lines, may be straight, ,linear, with a peek, or just rounded like we have
+          .tension(-0.05);
+
   }
 
   //sets values for creating arc, start point, mid point, and end point
@@ -273,7 +258,35 @@ angular.module("world").controller("earth", function($scope, mainService) {
     return result;
   }
 
-  function refresh() {
+  linkcamp.forEach(function(e,i,a) {
+
+    var feature = {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [e.source,e.target]
+      }
+    };
+    arcLines.push(feature);
+  });
+
+
+  linkjob.forEach(function(e,i,a) {
+
+    var feature = {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [e.source,e.target]
+      }
+    };
+    arcLines.push(feature);
+  });
+
+
+
+  var refresh = function () {
+
     svg.selectAll(".land")
     .attr("d", path);
 
@@ -293,7 +306,7 @@ angular.module("world").controller("earth", function($scope, mainService) {
       .attr("opacity", function(d) {
         return fade_at_edge(d);
       });
-  }
+  };
 
   //fades atrc lines as they sink behind earth
   function fade_at_edge(d) {
@@ -328,14 +341,14 @@ angular.module("world").controller("earth", function($scope, mainService) {
   }
 
   var m0, o0;
-  function mousedown() {
+  function mousedown (){
     m0 = [d3.event.pageX, d3.event.pageY];
     o0 = proj.rotate();
     d3.event.preventDefault();
   }
 
   //function used to update rotational position based on click and drag position
-  function mousemove() {
+  function mousemove () {
     if (m0) {
       var m1 = [d3.event.pageX, d3.event.pageY];
       o1 = [o0[0] + (m1[0] - m0[0]) / 6, o0[1] + (m0[1] - m1[1]) / 6];
@@ -349,11 +362,31 @@ angular.module("world").controller("earth", function($scope, mainService) {
   }
 
   //ends click and drag of earth
-  function mouseup() {
+  function mouseup () {
     if (m0) {
       mousemove();
       m0 = null;
     }
   }
+
+  $scope.zoomin = function () {
+    if (scale > 1500) {
+      return;
+    }
+    scale = scale + 50;
+    proj.scale(scale);
+    sky.scale(scale);
+    refresh();
+  };
+
+  $scope.zoomout = function () {
+    if (scale < 101) {
+      return;
+    }
+    scale = scale - 50;
+    proj.scale(scale);
+    sky.scale(scale);
+    refresh();
+  };
 
 });

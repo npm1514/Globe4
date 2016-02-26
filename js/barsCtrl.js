@@ -1,4 +1,4 @@
-angular.module("world").controller("bars", function($scope, mainService) {
+angular.module("world").controller("barsCtrl", function($scope, mainService) {
 
   //***************************bars****************************
 

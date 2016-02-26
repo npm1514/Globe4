@@ -1,4 +1,6 @@
-angular.module("world").controller("mainCtrl", function($scope) {
+angular.module("world").controller("mainCtrl", function($scope, $window) {
+
 
   
+
 });

@@ -1,6 +1,6 @@
-angular.module("world").controller("scrollbar", function($scope, mainService) {
+angular.module("world").controller("scrollbarCtrl", function($scope, mainService, $rootScope) {
 
-//********************scrollbar*************************
+//********************scrollbar
   //definition of circle drag
   var drag = d3.behavior.drag()
     .origin(Object)
@@ -15,7 +15,7 @@ angular.module("world").controller("scrollbar", function($scope, mainService) {
 
   //svg description
   var g = svg.selectAll('g')
-    .data([{x: 100, y : 20}])
+    .data([{x: 0, y : 20}])
     .enter()
     .append('g')
     .attr("height", 100)
@@ -40,6 +40,7 @@ angular.module("world").controller("scrollbar", function($scope, mainService) {
 
   //drag scroll bar
   function dragMove(d) {
+    $rootScope.$digest();
     var range = 450;
     var time = d.x;
     var percentdrag = time/range;
@@ -54,7 +55,8 @@ angular.module("world").controller("scrollbar", function($scope, mainService) {
     // console.log(timeline);
     var timelinerate = ((time / range) * timeline) + start;
     var scrolldate = moment(timelinerate);
-    $scope.cohortupdate = [];
+    // $scope.cohortupdate = [];
+    $rootScope.cohortupdate = [];
 
     for (var i = 0; i < mainService.cohorts.length; i++) {
 
@@ -70,27 +72,26 @@ angular.module("world").controller("scrollbar", function($scope, mainService) {
       });
       //if scroll date is greater than the day in the object, include date in object
       if (scrolldate > newstart) {
-        $scope.cohortupdate.push(mainService.cohorts[i]);
+        $rootScope.cohortupdate.push(mainService.cohorts[i]);
       }
       if (scrolldate > newend) {
-        for (var j = 0; j < $scope.cohortupdate.length; j++) {
-          for (var k = 0; k < $scope.cohortupdate[j].people[k].length; k++) {
-            $scope.cohortupdate[j].people[k].geometryto = {};
+        for (var j = 0; j < $rootScope.cohortupdate.length; j++) {
+          for (var k = 0; k < $rootScope.cohortupdate[j].people[k].length; k++) {
+            $rootScope.cohortupdate[j].people[k].geometryto = {};
           }
         }
       }
     }
-
     d3.select(this)
         .attr("opacity", 0.6)
         .attr("cx", d.x = Math.max(0, Math.min(450, d3.event.x)))
         .attr("cy", d.y = 20);
 
   }
+
   //end dragging
   function dragEnd() {
       d3.select(this)
           .attr('opacity', 1);
   }
-
 });

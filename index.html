@@ -13,8 +13,8 @@
     <script src="plugins/moment.js"></script>
 
   </head>
-  <body >
-    <div class="head" ng-controller="earth">
+  <body zoomin="zoomin" zoomout="zoomout">
+    <div class="head">
       <h2>DevMountain: Time Lapse</h2>
       <i class="fa fa-toggle-down" ng-hide="open" ng-click="open=true"><h5>More Info</h5></i>
       <i class="fa fa-toggle-up" ng-show="open" ng-click="open=false"><h5>Close</h5></i>
@@ -24,36 +24,32 @@
         <p>The bars on the right are a display of some specific statistics related to total student count,  where they came from, out of state retention rate, and job placement after completion of the course.</p>
         <p class="infoexit" ng-click="open=false">x</p>
       </div>
-      <div class="zoom" >
-        <i class="fa fa-plus-square-o fa-3x" ng-click="zoomin()"></i><br>
-        <i class="fa fa-minus-square-o fa-3x" ng-click="zoomout()"></i>
+      <div class="zoom">
+          <i class="fa fa-plus-square-o fa-3x" ng-click="zoomin()"></i><br>
+          <i class="fa fa-minus-square-o fa-3x" ng-click="zoomout()"></i>
       </div>
 
     </div>
 
-    <div class="scrollbar" ng-controller="scrollbar">
-
-    </div>
-
-    <div class="earth">
-    </div>
+    <scrollbar class="scrollbar" cohortupdate='cohortupdate'></scrollbar>
 
 
-    <div class="bars" ng-controller="bars">
+    <earth class="earth" zoomin="zoomin" zoomout="zoomout" cohortupdate='cohortupdate'></earth>
+
+    <bars class="bars" data="data" cohortupdate='cohortupdate' refresh="refresh">
       <div class="students"><h2>({{data[0]}}) Students</h2></div>
       <div class="states"><h2>({{data[1]}}) States</h2></div>
       <div class="countries"><h2>({{data[2]}}) Countries</h2></div>
       <div class="retention"><h2>({{data[3]}}%) Retention</h2></div>
       <div class="jobs"><h2>({{data[4]}}%) Jobs</h2></div>
-
-    </div>{{data[0]}}-
+    </bars>
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
     <script src="js/app.js"></script>
     <script src="js/mainCtrl.js"></script>
-    <script src="js/earth.js"></script>
-    <script src="js/bars.js"></script>
-    <script src="js/scrollbar.js"></script>
+    <script src="js/earthCtrl.js"></script>
+    <script src="js/barsCtrl.js"></script>
+    <script src="js/scrollbarCtrl.js"></script>
     <script src="js/service.js"></script>
 
   </body>
