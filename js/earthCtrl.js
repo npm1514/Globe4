@@ -1,10 +1,8 @@
 angular.module("world").controller("earthCtrl", function($scope, $window, mainService, $interval, $rootScope ) {
 
-
-
 //**********************earth********************************
 
-  var scale = 400;
+  var scale = 380;
 
   //establish mouse move variable
   d3.select(window)
@@ -16,14 +14,14 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
 
   //view of earth
   var proj = d3.geo.orthographic()
-      .translate([width / 2.5, height / 2.25])//position of earth on page
+      .translate([width / 2.5, height / 2])//position of earth on page
       .clipAngle(90)//determines projection of map on globe
       .scale(scale)
       .rotate([104,-40]);//size of projection
 
   //view of sky
   var sky = d3.geo.orthographic()
-      .translate([width / 2.5, height / 2.25])//position of sky on page
+      .translate([width / 2.5, height / 2])//position of sky on page
       .clipAngle(90)
       .scale(scale*1.3)
       .rotate([104,-40]);//size of projection
@@ -132,7 +130,7 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
   //of ocean
     svg.append("circle")
       .attr("cx", width / 2.5)
-      .attr("cy", height / 2.25)
+      .attr("cy", height / 2)
       .attr("r", proj.scale())
       .attr("class", "noclicks")
       .style("fill", "url(#ocean_fill)");
@@ -146,7 +144,7 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
   //of globe highlight
     svg.append("circle")
       .attr("cx", width / 2.5)
-      .attr("cy", height / 2.25)
+      .attr("cy", height / 2)
       .attr("r", proj.scale())
       .attr("class","noclicks")
       .style("fill", "url(#globe_highlight)");
@@ -154,7 +152,7 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
   //of globe shading
     svg.append("circle")
       .attr("cx", width / 2.5)
-      .attr("cy", height / 2.25)
+      .attr("cy", height / 2)
       .attr("r", proj.scale())
       .attr("class","noclicks")
       .style("fill", "url(#globe_shading)");
@@ -175,38 +173,63 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
     // $interval(function(){console.log($rootScope.cohortupdate);}, 1000);
 
     $rootScope.cohortupdate = [];
-    console.log($rootScope.cohortupdate);
 
     $rootScope.$watchCollection('cohortupdate', function() {
       makearc();
     },true);
 
     makearc = function() {
-      console.log("making arcs kind of");
+      linkcamp=[];
+      linkjob=[];
+
+      svg.selectAll(".flyin")
+        .data(linkcamp)
+        .exit()
+        .remove();
+
+        svg.selectAll(".flyout")
+          .data(linkjob)
+          .exit()
+          .remove();
+
       $rootScope.cohortupdate.forEach(function(a) {
         for(var i = 0; i < a.people.length; i++) {
+
           linkcamp.push({
             "source": a.people[i].geometryfrom.coordinates,
             "target": a.people[i].geometrycamp.coordinates
           });
-          linkjob.push({
-            "source": a.people[i].geometrycamp.coordinates,
-            "target": a.people[i].geometryto.coordinates
-          });
+          // console.log(a.people[i].geometryto.coordinates);
+          if (a.people[i].geometryto.coordinates) {
+            linkjob.push({
+              "source": a.people[i].geometrycamp.coordinates,
+              "target": a.people[i].geometryto.coordinates
+            });
+          }
+
         }
       });
 
       // append arc shadows
-        svg.append("g")
-          .attr("class","arcs")
-          .selectAll("path")
-          .data(arcLines)
-          .enter()
-          .append("path")
-          .attr("class","arc")
-          .attr("d",path);
+        // svg.append("g")
+        //   .attr("class","arcs")
+        //   .selectAll("path")
+        //   .data(arcLines)
+        //   .enter()
+        //   .append("path")
+        //   .attr("class","arc")
+        //   .attr("class","arcs")
+        //   .attr("d",path);
+        //
+        //   svg.append("g")
+        //     .attr("class","arc")
+        //     .selectAll("path")
+        //     .data(arcLines)
+        //     .exit()
+        //     .remove();
 
       //create flyin arcs
+      if (linkcamp) {
         svg.append("g")
           .attr("class","flyin")
           .selectAll("path")
@@ -217,8 +240,11 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
           .attr("d", function(d) {
             return swoosh(flying_arc(d));
           });
+      }
+
 
       //create flyout arcs
+      if (linkjob){
         svg.append("g")
           .attr("class","flyout")
           .selectAll("path")
@@ -226,9 +252,11 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
           .enter()
           .append("path")
           .attr("class","flyer")
+          // .attr("class", "flyout")
           .attr("d", function(d) {
             return swoosh(flying_arc(d));
           });
+      }
 
       refresh();
     };
@@ -293,11 +321,11 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
     svg.selectAll(".noclicks")
     .attr("r", proj.scale());
 
-    svg.selectAll(".arc")
-    .attr("d", path)
-      .attr("opacity", function(d) {
-          return fade_at_edge(d);
-      });
+    // svg.selectAll(".arc")
+    // .attr("d", path)
+    //   .attr("opacity", function(d) {
+    //       return fade_at_edge(d);
+    //   });
 
     svg.selectAll(".flyer")
       .attr("d", function(d) {

@@ -36,7 +36,8 @@ angular.module("world", [])
    restrict: 'E',
    scope: {
      cohortupdate: '=',
-     arcit: '&'
+     arcit: '&',
+     scrolldate: '='
    },
    controller: 'scrollbarCtrl'
  };

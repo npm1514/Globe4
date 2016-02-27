@@ -1,6 +1,12 @@
 angular.module("world").controller("scrollbarCtrl", function($scope, mainService, $rootScope) {
 
 //********************scrollbar
+  $scope.scrolldate = moment().set({
+    "year": 2014,
+    "month": 8,
+    "date": 7
+  });
+
   //definition of circle drag
   var drag = d3.behavior.drag()
     .origin(Object)
@@ -41,6 +47,11 @@ angular.module("world").controller("scrollbarCtrl", function($scope, mainService
   //drag scroll bar
   function dragMove(d) {
     $rootScope.$digest();
+
+
+    var afterData = mainService.cohorts;
+
+
     var range = 450;
     var time = d.x;
     var percentdrag = time/range;
@@ -50,48 +61,41 @@ angular.module("world").controller("scrollbarCtrl", function($scope, mainService
       "date": 7
     });
     var end = moment();
-    // console.log(start);
     var timeline = end._d - start._d;
-    // console.log(timeline);
     var timelinerate = ((time / range) * timeline) + start;
-    var scrolldate = moment(timelinerate);
-    // $scope.cohortupdate = [];
+    $scope.scrolldate = moment(timelinerate);
     $rootScope.cohortupdate = [];
 
-    for (var i = 0; i < mainService.cohorts.length; i++) {
+    for (var i = 0; i < afterData.length; i++) {
 
       var newstart = moment().set({
-        "year": parseInt(mainService.cohorts[i].start.slice(0,4)),
-        "month": parseInt(mainService.cohorts[i].start.slice(5,7)) - 1,
-        "date": parseInt(mainService.cohorts[i].start.slice(8,10))
+        "year": parseInt(afterData[i].start.slice(0,4)),
+        "month": parseInt(afterData[i].start.slice(5,7)) - 1,
+        "date": parseInt(afterData[i].start.slice(8,10))
       });
       var newend = moment().set({
-        "year": parseInt(mainService.cohorts[i].end.slice(0,4)),
-        "month": parseInt(mainService.cohorts[i].end.slice(5,7)) - 1,
-        "date": parseInt(mainService.cohorts[i].end.slice(8,10))
+        "year": parseInt(afterData[i].end.slice(0,4)),
+        "month": parseInt(afterData[i].end.slice(5,7)) - 1,
+        "date": parseInt(afterData[i].end.slice(8,10))
       });
+
+
       //if scroll date is greater than the day in the object, include date in object
-      if (scrolldate > newstart) {
-        $rootScope.cohortupdate.push(mainService.cohorts[i]);
+      if ($scope.scrolldate > newstart && $scope.scrolldate > newend) {
+        $rootScope.cohortupdate.push(afterData[i]);
       }
-      if (scrolldate > newend) {
-        for (var j = 0; j < $rootScope.cohortupdate.length; j++) {
-          for (var k = 0; k < $rootScope.cohortupdate[j].people[k].length; k++) {
-            $rootScope.cohortupdate[j].people[k].geometryto = {};
-          }
-        }
-      }
+
     }
     d3.select(this)
         .attr("opacity", 0.6)
         .attr("cx", d.x = Math.max(0, Math.min(450, d3.event.x)))
-        .attr("cy", d.y = 20);
-
-  }
+        .attr("cy", d.y = 20);  }
 
   //end dragging
   function dragEnd() {
       d3.select(this)
           .attr('opacity', 1);
   }
+
+
 });

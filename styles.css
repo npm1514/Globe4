@@ -1,6 +1,7 @@
 .land {
   fill: #5a5255;
   stroke-opacity: 1;
+  stroke: #8d8d8d;
 }
 /*grid*/
 .graticule {
@@ -93,7 +94,7 @@ i {
 }
 
 .bars {
-  width: calc(100% - 880px);
+  width: calc(100% - 1000px);
   height: 860px;
   position: fixed;
   top:0;
@@ -106,6 +107,8 @@ i {
   float: right;
   margin: 2vh 0;
   background-color: lightblue;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
 }
 
 .bars div h2 {
@@ -159,19 +162,22 @@ i {
 
 .scrollbar {
   position: fixed;
-  top: 20px;
+  top: 40px;
   left: 0;
   right: 0;
   margin: auto;
   width: 500px;
   height: 100px;
   z-index: 100;
+  text-align: center;
 }
 
 
 @media only screen and (max-width: 1200px) {
   .bars {
+    position: absolute;
     width: 100%;
+    margin-top: 900px;
   }
   svg {
     float: left;
