@@ -37,7 +37,8 @@ angular.module("world", [])
    scope: {
      cohortupdate: '=',
      arcit: '&',
-     scrolldate: '='
+     scrolldate: '=',
+     play: '='
    },
    controller: 'scrollbarCtrl'
  };

@@ -172,6 +172,23 @@ i {
   text-align: center;
 }
 
+.scroll {
+  z-index: 100;
+}
+
+.timeplay {
+  display: inline-block;
+}
+
+.timeplay i, .timeplay h2 {
+  display: inline-block;
+  float: left;
+}
+
+.timeplay i {
+  margin: 15px;
+}
+
 
 @media only screen and (max-width: 1200px) {
   .bars {

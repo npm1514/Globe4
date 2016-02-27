@@ -25,27 +25,69 @@ angular.module("world").controller("scrollbarCtrl", function($scope, mainService
     .enter()
     .append('g')
     .attr("height", 100)
-    .attr("widht", 450)
+    .attr("width", 450)
     .attr('transform', 'translate(20, 10)');
 
-  //bar description
-  var rect = g
-    .append('rect')
-    .attr('y', 17)
-    .attr("height", 5)
-    .attr("width", 450)
-    .attr('fill', '#C0C0C0');
+    var rect = g
+      .append('rect')
+      .attr('y', 17)
+      .attr("height", 5)
+      .attr("width", 450)
+      .attr('fill', '#C0C0C0');
+    // .call(drag);
 
     //of dragging scroll bar circle
   g.append("circle")
+    .attr("class","scroll")
     .attr("r", 15)
     .attr("cx", function(d) { return d.x; })
     .attr("cy", function(d) { return d.y; })
     .attr("fill", "#2394F5")
     .call(drag);
 
+
+  $scope.play = function() {
+    if ($scope.animationInterval){
+        clearInterval($scope.animationInterval);
+        $scope.animationInterval = null;
+        return;
+    }
+    if (d3.select('.scroll').attr("cx")>=450) {
+      d3.select('.scroll').attr("cx", 0);
+    }
+    $scope.animationInterval = setInterval(forwardTimeStep, 100);
+    //
+    // g.selectAll('.scroll')
+    //
+    //   .data([{x: 450, y : 20}])
+    //   .transition()
+    //   .duration(20000)
+    //   .attr('transform', 'translate(450, 0)');
+
+  };
+
+  //bar description
+
+  function forwardTimeStep(){
+    if (d3.select('.scroll').attr("cx")>=450){
+      clearInterval($scope.animationInterval);
+      $scope.animationInterval = null;
+    }
+    console.log(d3.select('.scroll').attr("cx"));
+    updateEarth(d3.select('.scroll').attr("cx")*1+1);
+    d3.select('.scroll').attr("cx", d3.select('.scroll').attr("cx")*1+1);
+  }
+
+  function dragMove(d){
+    updateEarth.call(this, d.x);
+    d3.select(this)
+        .attr("opacity", 0.6)
+        .attr("cx", d.x = Math.max(0, Math.min(450, d3.event.x)))
+        .attr("cy", d.y = 20);
+  }
+
   //drag scroll bar
-  function dragMove(d) {
+  function updateEarth(time) {
     $rootScope.$digest();
 
 
@@ -53,7 +95,6 @@ angular.module("world").controller("scrollbarCtrl", function($scope, mainService
 
 
     var range = 450;
-    var time = d.x;
     var percentdrag = time/range;
     var start = moment().set({
       "year": 2014,
@@ -86,10 +127,7 @@ angular.module("world").controller("scrollbarCtrl", function($scope, mainService
       }
 
     }
-    d3.select(this)
-        .attr("opacity", 0.6)
-        .attr("cx", d.x = Math.max(0, Math.min(450, d3.event.x)))
-        .attr("cy", d.y = 20);  }
+  }
 
   //end dragging
   function dragEnd() {
