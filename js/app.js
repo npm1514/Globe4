@@ -15,8 +15,7 @@ angular.module("world", [])
    scope: {
      zoomin: '=',
      zoomout: '=',
-     cohortupdate:'=',
-     arcit:'&'
+     cohortupdate:'='
    },
    controller: 'earthCtrl'
  };

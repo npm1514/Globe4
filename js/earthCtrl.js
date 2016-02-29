@@ -122,8 +122,6 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
       .datum(topojson.feature(world, world.objects.countries))
       .attr("class", "land noclicks")
       .attr("d", path);
-      console.log(world);
-      console.log(usa);
 
   //of usa
     svg.append("path")
@@ -147,62 +145,61 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
       .attr("class","noclicks")
       .style("fill", "url(#globe_shading)");
 
+  //ROOTSCOPE MONITORING
 
     $rootScope.cohortupdate = [];
 
     $rootScope.$watchCollection('cohortupdate', function() {
-      makearc();
+      $rootScope.makearc();
     },true);
 
-    makearc = function() {
-      linkcamp=[];
-      linkjob=[];
+    //FUNCTIONS
+    $rootScope.makearc = function () {
 
+      linkcamp = [];
+      linkjob = [];
+
+      //resets flyin arcs
       svg.selectAll(".flyin")
-        .data(linkcamp)
-        .exit()
-        .remove();
+          .data(linkcamp)
+          .exit()
+          .remove();
 
-        svg.selectAll(".flyout")
+      //resets flyout arcs
+      svg.selectAll(".flyout")
           .data(linkjob)
           .exit()
           .remove();
 
+      //resets arc shadows
+      svg.append("g")
+          .attr("class","arc")
+          .selectAll("path")
+          .data(arcLines)
+          .exit()
+          .remove();
+
+      //populates arc coordinate array
       $rootScope.cohortupdate.forEach(function(a) {
         for(var i = 0; i < a.people.length; i++) {
 
-          linkcamp.push({
-            "source": a.people[i].geometryfrom.coordinates,
-            "target": a.people[i].geometrycamp.coordinates
-          });
-          // console.log(a.people[i].geometryto.coordinates);
+          //for from to camp
+          if (a.people[i].geometryfrom.coordinates) {
+            linkcamp.push({
+              "source": a.people[i].geometryfrom.coordinates,
+              "target": a.people[i].geometrycamp.coordinates
+            });
+          }
+
+          //for camp to job
           if (a.people[i].geometryto.coordinates) {
             linkjob.push({
               "source": a.people[i].geometrycamp.coordinates,
               "target": a.people[i].geometryto.coordinates
             });
           }
-
         }
       });
-
-      // append arc shadows
-        // svg.append("g")
-        //   .attr("class","arcs")
-        //   .selectAll("path")
-        //   .data(arcLines)
-        //   .enter()
-        //   .append("path")
-        //   .attr("class","arc")
-        //   .attr("class","arcs")
-        //   .attr("d",path);
-        //
-        //   svg.append("g")
-        //     .attr("class","arc")
-        //     .selectAll("path")
-        //     .data(arcLines)
-        //     .exit()
-        //     .remove();
 
       //create flyin arcs
       if (linkcamp) {
@@ -219,11 +216,11 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
           });
       }
 
-
       //create flyout arcs
       if (linkjob){
         svg.append("g")
           .attr("class","flyout")
+          .style("stroke-linecap", "round")
           .selectAll("path")
           .data(linkjob)
           .enter()
@@ -235,19 +232,20 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
           });
       }
 
+    // append arc shadows
+      svg.append("g")
+          .attr("class","arcs")
+          .selectAll("path")
+          .data(arcLines)
+          .enter()
+          .append("path")
+          .attr("class","arc")
+          .attr("class","arcs")
+          .attr("d",path);
+
+
       refresh();
     };
-
-    var swoosh = d3.svg.line()
-          .x(function(d) {
-            return d[0];
-          })
-          .y(function(d) {
-            return d[1];
-          })
-          .interpolate("cardinal")//type of lines, may be straight, ,linear, with a peek, or just rounded like we have
-          .tension(-0.05);
-
   }
 
   //sets values for creating arc, start point, mid point, and end point
@@ -263,35 +261,15 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
     return result;
   }
 
-  linkcamp.forEach(function(e,i,a) {
-
-    var feature = {
-      "type": "Feature",
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [e.source,e.target]
-      }
-    };
-    arcLines.push(feature);
-  });
-
-
-  linkjob.forEach(function(e,i,a) {
-
-    var feature = {
-      "type": "Feature",
-      "geometry": {
-        "type": "LineString",
-        "coordinates": [e.source,e.target]
-      }
-    };
-    arcLines.push(feature);
-  });
+  //interpolates line for arclines
+  function location_along_arc(start, end, loc) {
+    var interpolator = d3.geo.interpolate(start,end);
+    return interpolator(loc);
+  }
 
 
 
   var refresh = function () {
-
     svg.selectAll(".land")
     .attr("d", path);
 
@@ -327,7 +305,7 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
       end = d.geometry.coordinates[1];
     }
 
-    var start_dist = 2 - arc.distance({source: start, target: centerPos}),
+    var start_dist = 1.9 - arc.distance({source: start, target: centerPos}),
         end_dist = 1.75 - arc.distance({source: end, target: centerPos});
 
     var fade = d3.scale.linear()
@@ -339,13 +317,10 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
     return fade(dist);
   }
 
-  //interpolates line for arclines
-  function location_along_arc(start, end, loc) {
-    var interpolator = d3.geo.interpolate(start,end);
-    return interpolator(loc);
-  }
-
+  //create variables for mousemove
   var m0, o0;
+
+  //on click rotate function
   function mousedown (){
     m0 = [d3.event.pageX, d3.event.pageY];
     o0 = proj.rotate();
@@ -374,6 +349,7 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
     }
   }
 
+  //zoomin function
   $scope.zoomin = function () {
     if (scale > 1500) {
       return;
@@ -384,6 +360,7 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
     refresh();
   };
 
+  //zoomout function
   $scope.zoomout = function () {
     if (scale < 101) {
       return;
