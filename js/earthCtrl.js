@@ -1,70 +1,73 @@
 angular.module("world").controller("earthCtrl", function($scope, $window, mainService, $interval, $rootScope ) {
 
-//**********************earth********************************
-
-  var scale = 380;
-
-  //establish mouse move variable
-  d3.select(window)
-      .on("mousemove", mousemove)
-      .on("mouseup", mouseup);
-
-  var width = 1300,
-      height = 1000;
+//VARIABLES
+//create variables
+  var linkcamp = [], //coordinates for from to camp
+      linkjob  = [], //coordinates for camp to job
+      arcLines = [], //coordinates for arc ashadows
+      scale    = 380, //scale of earth
+      width    = 1300, //earth svg width
+      height   = 1000; //earth svg height
 
   //view of earth
   var proj = d3.geo.orthographic()
       .translate([width / 2.5, height / 2])//position of earth on page
       .clipAngle(90)//determines projection of map on globe
-      .scale(scale)
+      .scale(scale) //scale of globe
       .rotate([104,-40]);//size of projection
 
   //view of sky
   var sky = d3.geo.orthographic()
       .translate([width / 2.5, height / 2])//position of sky on page
-      .clipAngle(90)
-      .scale(scale*1.3)
+      .clipAngle(90) //equal projectio as earth
+      .scale(scale*1.3) //scale of sky, slightly bigger than earth
       .rotate([104,-40]);//size of projection
 
-  //location points
+  //creates path generator based on selected projection type, in our case, orthographic
   var path = d3.geo.path()
-  .projection(proj);
+      .projection(proj);
 
+//**********************change to greatArc
   //function for projection of arc lines
   var swoosh = d3.svg.line()
-        .x(function(d) {
-          return d[0];
-        })
-        .y(function(d) {
-          return d[1];
-        })
-        .interpolate("cardinal")//type of lines, may be straight, ,linear, with a peek, or just rounded like we have
-        .tension(-0.05);//curvature of arc lines -1 to 1
-
-  var linkcamp = [],
-      linkjob = [];
-      arcLines = [];
+      .x(function(d) {
+        return d[0];
+      })
+      .y(function(d) {
+        return d[1];
+      })
+      .interpolate("cardinal")//type of lines, may be straight, ,linear, with a peek, or just rounded like we have
+      .tension(-0.05);//curvature of arc lines -1 to 1
 
   //earth svg definition
   var svg = d3.select(".earth")
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .on("mousedown", mousedown);
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .on("mousedown", mousedown);
+
+//INITIALIZE FUNCTIONS
+
+    //establish mouse move variables
+  d3.select(window)
+      .on("mousemove", mousemove)
+      .on("mouseup", mouseup);
 
   //call in json of world svg and coordinates
   queue()
-    .defer(d3.json, "json/world-110m.json")
-    .await(ready);
+      .defer(d3.json, "json/world-110m.json")
+      .defer(d3.json, "json/usa.json")
+      .await(ready);
 
-
-
+//REUSABLE FUNCTIONS
 
 //function to append
+  function ready(error, world, usa) {
+    //FUNCTION VARIABLES
 
-  function ready(error, world) {
-    //ocean fill
-    var ocean_fill = svg.append("defs").append("radialGradient")
+    //ocean fill and sun lighting
+    var ocean_fill = svg.append("defs")
+        .append("radialGradient")
         .attr("id", "ocean_fill")
         .attr("cx", "75%")//light position x direction
         .attr("cy", "25%");//light position y direction
@@ -75,7 +78,7 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
         .attr("offset", "100%")
         .attr("stop-color", "#1b85b8");//background color
 
-    //globe fill
+    //globe fill and sun lighting
     var globe_highlight = svg.append("defs")
         .append("radialGradient")
         .attr("id", "globe_highlight")
@@ -83,7 +86,7 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
         .attr("cy", "25%");//light position y direction
         globe_highlight.append("stop")
         .attr("offset", "5%")
-        .attr("stop-color", "#fff")//light color
+        .attr("stop-color", "lightblue")//light color
         .attr("stop-opacity","0.6");
         globe_highlight.append("stop")
         .attr("offset", "100%")
@@ -91,41 +94,20 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
         .attr("stop-opacity","0.2");
 
     //globe shading
-    var globe_shading = svg.append("defs").append("radialGradient")
+    var globe_shading = svg.append("defs")
+          .append("radialGradient")
           .attr("id", "globe_shading")
           .attr("cx", "55%")
           .attr("cy", "45%");
         globe_shading.append("stop")
           .attr("offset","30%")
-          .attr("stop-color", "#fff")
+          .attr("stop-color", "lightblue")
           .attr("stop-opacity","0");
         globe_shading.append("stop")
           .attr("offset","100%").attr("stop-color", "#000")
           .attr("stop-opacity","0.6");
 
-    //some other shadow
-    var drop_shadow = svg.append("defs").append("radialGradient")
-          .attr("id", "drop_shadow")
-          .attr("cx", "50%")
-          .attr("cy", "50%");
-        drop_shadow.append("stop")
-          .attr("offset","20%")
-          .attr("stop-color", "#fff")
-          .attr("stop-opacity",".5");
-        drop_shadow.append("stop")
-          .attr("offset","100%")
-          .attr("stop-color", "#fff")
-          .attr("stop-opacity","0");
-
 //actually append svgs
-
-  //of shadow
-    svg.append("ellipse")
-      .attr("cx", 450)
-      .attr("cy", 450)
-      .attr("r", proj.scale()*1.5)
-      .attr("class", "noclicks")
-      .style("fill", "url(#drop_shadow)");
 
   //of ocean
     svg.append("circle")
@@ -138,6 +120,14 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
   //of land
     svg.append("path")
       .datum(topojson.feature(world, world.objects.countries))
+      .attr("class", "land noclicks")
+      .attr("d", path);
+      console.log(world);
+      console.log(usa);
+
+  //of usa
+    svg.append("path")
+      .datum(topojson.feature(usa, usa.objects.states))
       .attr("class", "land noclicks")
       .attr("d", path);
 
@@ -157,20 +147,6 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
       .attr("class","noclicks")
       .style("fill", "url(#globe_shading)");
 
-  //of globe points
-    // svg.append("g")
-    // .attr("class","points")
-    //     .selectAll("text")
-    //     .data(places.features)
-    //     .enter()
-    //     .append("path")
-    //     .attr("class", "point")
-    //     .attr("d", path);
-    //     console.log(places.features);
-
-    // spawn links between cities as source/target coord pairs
-
-    // $interval(function(){console.log($rootScope.cohortupdate);}, 1000);
 
     $rootScope.cohortupdate = [];
 
@@ -232,6 +208,7 @@ angular.module("world").controller("earthCtrl", function($scope, $window, mainSe
       if (linkcamp) {
         svg.append("g")
           .attr("class","flyin")
+          .style("stroke-linecap", "round")
           .selectAll("path")
           .data(linkcamp)
           .enter()

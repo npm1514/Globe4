@@ -11,6 +11,7 @@
     <script src="plugins/queue.v1.min.js"></script>
     <script src="plugins/topojson.v1.min.js"></script>
     <script src="plugins/moment.js"></script>
+    <script src="plugins/datamaps.world.min.js"></script>
 
   </head>
   <body zoomin="zoomin" zoomout="zoomout">
@@ -40,7 +41,7 @@
     </scrollbar>
 
 
-    <earth class="earth" zoomin="zoomin" zoomout="zoomout" cohortupdate='cohortupdate'></earth>
+    <earth class="earth" id="earth" zoomin="zoomin" zoomout="zoomout" cohortupdate='cohortupdate'></earth>
 
     <bars class="bars" data="data" cohortupdate='cohortupdate' refresh="refresh">
       <div class="students"><h2>({{data[0]}}) Students</h2></div>
